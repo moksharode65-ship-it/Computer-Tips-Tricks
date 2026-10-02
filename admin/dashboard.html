@@ -138,7 +138,12 @@
         <div class="table-card">
             <div class="table-header">
                 <h2><i class="fa-solid fa-users" style="margin-right: 8px; color: var(--primary);"></i>Registered Students</h2>
-                <span style="font-size: 0.8rem; color: var(--text-muted);" id="student-count"></span>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span style="font-size: 0.8rem; color: var(--text-muted);" id="student-count"></span>
+                    <button class="delete-btn" onclick="clearAllStudents()" style="background: #fee2e2; color: #dc2626; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 0.8rem; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-trash-can"></i> Clear All Test Data
+                    </button>
+                </div>
             </div>
             <div id="students-table-body">
                 <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading data...</div>
@@ -265,10 +270,24 @@
             if (!confirm('Are you sure you want to remove this student?')) return;
             try {
                 await fetch('/api/admin/students/' + id, { method: 'DELETE' });
-                document.getElementById('row-' + id).remove();
                 loadDashboard();
             } catch (err) {
                 alert('Failed to delete student.');
+            }
+        }
+
+        async function clearAllStudents() {
+            if (!confirm('⚠️ Are you sure you want to clear ALL student accounts and test enrollments? This will reset the database for launch.')) return;
+            try {
+                const res = await fetch('/api/admin/clear-students', { method: 'DELETE' });
+                if (res.ok) {
+                    alert('✅ All student test data has been cleared!');
+                    loadDashboard();
+                } else {
+                    alert('Failed to clear data.');
+                }
+            } catch (err) {
+                alert('Server error.');
             }
         }
 

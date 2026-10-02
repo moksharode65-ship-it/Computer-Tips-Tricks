@@ -317,6 +317,19 @@ app.delete('/api/admin/students/:id', requireAdmin, async (req, res) => {
     }
 });
 
+// Clear all student accounts and test enrollments (Admin Only)
+app.delete('/api/admin/clear-students', requireAdmin, async (req, res) => {
+    try {
+        const { users, enrollments } = await getCollections();
+        await users.deleteMany({ role: 'student' });
+        await enrollments.deleteMany({});
+        res.json({ success: true, message: 'All student accounts and course enrollments cleared successfully!' });
+    } catch (err) {
+        console.error('Clear students error:', err);
+        res.status(500).json({ error: 'Failed to clear student database.' });
+    }
+});
+
 // Admin Logout
 app.post('/api/admin/logout', (req, res) => {
     req.session.destroy();
