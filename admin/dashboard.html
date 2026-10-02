@@ -76,7 +76,7 @@
         <div class="sidebar-nav">
             <a href="#" class="active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
             <a href="#" id="nav-students"><i class="fa-solid fa-users"></i> All Students</a>
-            <a href="#" id="nav-enrollments"><i class="fa-solid fa-clock-rotate-left"></i> Enrollment Requests <span class="nav-badge" id="pending-badge" style="display:none;">0</span></a>
+            <a href="#" id="nav-enrollments"><i class="fa-solid fa-graduation-cap"></i> Enrollments & Payments</a>
             <a href="/" style="margin-top: auto;"><i class="fa-solid fa-globe"></i> View Public Site</a>
         </div>
         <div class="sidebar-footer">
@@ -110,24 +110,24 @@
             <div class="stat-card">
                 <div class="stat-icon purple"><i class="fa-solid fa-graduation-cap"></i></div>
                 <div>
-                    <div class="stat-label">Approved Enrollments</div>
+                    <div class="stat-label">Course Enrollments</div>
                     <div class="stat-value" id="stat-enrollments">-</div>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon orange"><i class="fa-solid fa-hourglass-half"></i></div>
+                <div class="stat-icon orange" style="background:#ecfdf5; color:#10b981;"><i class="fa-solid fa-circle-check"></i></div>
                 <div>
-                    <div class="stat-label">Pending Requests</div>
-                    <div class="stat-value" id="stat-pending">-</div>
+                    <div class="stat-label">Platform Status</div>
+                    <div class="stat-value" style="color:#10b981; font-size: 1.2rem;">Live & Auto-Approved</div>
                 </div>
             </div>
         </div>
 
-        <!-- Pending Enrollment Requests -->
+        <!-- Course Enrollments Table -->
         <div class="table-card" id="pending-section">
             <div class="table-header">
-                <h2><i class="fa-solid fa-hourglass-half" style="margin-right: 8px; color: #f59e0b;"></i>Pending Enrollment Requests</h2>
-                <span style="font-size: 0.8rem; color: var(--text-muted);" id="pending-count"></span>
+                <h2><i class="fa-solid fa-graduation-cap" style="margin-right: 8px; color: var(--primary);"></i>Course Enrollments & Payments</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);" id="enrollment-count"></span>
             </div>
             <div id="pending-table-body">
                 <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading data...</div>
@@ -163,19 +163,9 @@
                 document.getElementById('stat-students').textContent = data.totalStudents;
                 document.getElementById('stat-revenue').textContent = '₹' + data.totalRevenue.toLocaleString('en-IN');
                 document.getElementById('stat-enrollments').textContent = data.totalEnrollments;
-                document.getElementById('stat-pending').textContent = data.pendingEnrollments.length;
                 document.getElementById('student-count').textContent = data.recentStudents.length + ' students';
 
-                // Update pending badge in sidebar
-                const badge = document.getElementById('pending-badge');
-                if (data.pendingEnrollments.length > 0) {
-                    badge.textContent = data.pendingEnrollments.length;
-                    badge.style.display = 'inline';
-                } else {
-                    badge.style.display = 'none';
-                }
-
-                renderPendingEnrollments(data.pendingEnrollments);
+                renderEnrollments(data.allEnrollments || []);
                 renderStudents(data.recentStudents);
             } catch (err) {
                 document.getElementById('students-table-body').innerHTML = '<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i>Could not connect to server.</div>';
@@ -183,17 +173,17 @@
             }
         }
 
-        function renderPendingEnrollments(enrollments) {
+        function renderEnrollments(enrollments) {
             const container = document.getElementById('pending-table-body');
-            const countEl = document.getElementById('pending-count');
-            countEl.textContent = enrollments.length + ' pending';
+            const countEl = document.getElementById('enrollment-count');
+            countEl.textContent = enrollments.length + ' enrollments';
 
             if (enrollments.length === 0) {
-                container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-circle-check" style="color: #10b981;"></i>No pending requests.<br>All enrollment requests have been processed!</div>';
+                container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-graduation-cap"></i>No course enrollments yet.<br>Share your course link to start receiving enrollments!</div>';
                 return;
             }
 
-            let html = '<table><thead><tr><th>Student</th><th>Course</th><th>Amount</th><th>Payment</th><th>Transaction ID</th><th>Date</th><th>Actions</th></tr></thead><tbody>';
+            let html = '<table><thead><tr><th>Student</th><th>Course</th><th>Amount</th><th>Payment Method</th><th>Transaction ID</th><th>Date</th><th>Access Status</th></tr></thead><tbody>';
             enrollments.forEach(e => {
                 const date = new Date(e.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
                 html += `<tr id="enroll-row-${e.id}">
@@ -207,10 +197,9 @@
                     <td style="font-size: 0.85rem; font-weight: 500;">${e.transactionId || '<span style="color:#d1d5db;">—</span>'}</td>
                     <td style="color: var(--text-muted); font-size: 0.85rem;">${date}</td>
                     <td>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button class="action-btn approve-btn" onclick="approveEnrollment('${e.id}')"><i class="fa-solid fa-check"></i> Approve</button>
-                            <button class="action-btn reject-btn" onclick="rejectEnrollment('${e.id}')"><i class="fa-solid fa-xmark"></i> Reject</button>
-                        </div>
+                        <span style="background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px;">
+                            <i class="fa-solid fa-circle-check"></i> Active & Approved
+                        </span>
                     </td>
                 </tr>`;
             });

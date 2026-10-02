@@ -35,6 +35,8 @@ async function connectDB() {
             createdAt: new Date().toISOString()
         });
         console.log('✅ Default admin created: admin@computertips.com / admin123');
+    }
+
     // Ensure legacy pending enrollments are auto-approved
     const enrollments = db.collection('enrollments');
     await enrollments.updateMany(
@@ -249,17 +251,16 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
     try {
         const { users, enrollments } = await getCollections();
         const totalStudents = await users.countDocuments({ role: 'student' });
-        const allEnrollments = await enrollments.find().toArray();
-        const totalEnrollments = allEnrollments.filter(e => e.status === 'APPROVED').length;
-        const pendingEnrollments = allEnrollments.filter(e => e.status === 'PENDING');
-        const totalRevenue = allEnrollments.filter(e => e.status === 'APPROVED').reduce((sum, e) => sum + (e.amount || 0), 0);
+        const allEnrollments = await enrollments.find().sort({ createdAt: -1 }).toArray();
+        const totalEnrollments = allEnrollments.length;
+        const totalRevenue = allEnrollments.reduce((sum, e) => sum + (e.amount || 0), 0);
         const recentStudents = await users.find({ role: 'student' }, { projection: { password: 0 } })
             .sort({ createdAt: -1 }).limit(10).toArray();
 
         res.json({
             totalStudents,
             totalEnrollments,
-            pendingEnrollments: pendingEnrollments.map(e => ({ ...e, id: e._id.toString() })),
+            allEnrollments: allEnrollments.map(e => ({ ...e, id: e._id.toString() })),
             totalRevenue,
             recentStudents: recentStudents.map(u => ({ id: u._id.toString(), name: u.name, email: u.email, phone: u.phone, createdAt: u.createdAt }))
         });
