@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Computer Tips & Tricks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #2b9cd9; --text-dark: #1f2937; --text-muted: #6b7280; --border-color: #e5e7eb; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: #111827; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .login-container { background: #1f2937; padding: 3rem; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); width: 100%; max-width: 420px; text-align: center; border: 1px solid #374151; }
+        .logo-container { display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 800; font-size: 1.15rem; margin-bottom: 2rem; }
+        .real-logo { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .admin-badge { background: #ef4444; color: white; padding: 0.2rem 0.75rem; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; }
+        h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .subtitle { color: #9ca3af; margin-bottom: 2rem; font-size: 0.95rem; }
+        .input-group { text-align: left; margin-bottom: 1.5rem; }
+        .input-group label { display: block; font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: #d1d5db; }
+        .input-group input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #374151; border-radius: 8px; font-size: 1rem; outline: none; background: #111827; color: white; transition: border-color 0.2s; }
+        .input-group input:focus { border-color: var(--primary); }
+        .btn { width: 100%; padding: 0.875rem; background-color: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background-color 0.2s; }
+        .btn:hover { background-color: #1e7eb3; }
+        .error-msg { background: rgba(239, 68, 68, 0.15); color: #fca5a5; padding: 0.75rem; border-radius: 8px; font-size: 0.875rem; margin-bottom: 1rem; display: none; }
+        .back-link { position: absolute; top: 2rem; left: 2rem; color: #6b7280; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; font-weight: 500; }
+        .back-link:hover { color: #9ca3af; }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Site</a>
+    <div class="login-container">
+        <div class="logo-container">
+            <img src="/assets/logo.png" alt="Logo" class="real-logo">
+            Admin Panel <span class="admin-badge">SECURE</span>
+        </div>
+        <h2><i class="fa-solid fa-shield-halved" style="margin-right: 8px;"></i>Admin Access</h2>
+        <p class="subtitle">This area is restricted to authorized administrators only.</p>
+        <div class="error-msg" id="error-msg"></div>
+        <form id="adminLoginForm">
+            <div class="input-group">
+                <label for="email">Admin Email</label>
+                <input type="email" id="email" placeholder="admin@computertips.com" value="admin@computertips.com" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn" id="loginBtn"><i class="fa-solid fa-right-to-bracket"></i> Enter Dashboard</button>
+        </form>
+    </div>
+    <script>
+        // Check if already logged in as admin
+        async function checkAdminSession() {
+            try {
+                const res = await fetch('/api/me');
+                if (res.ok) {
+                    const user = await res.json();
+                    if (user.role === 'admin') {
+                        window.location.href = '/admin/dashboard.html';
+                    }
+                }
+            } catch(e) {}
+        }
+        checkAdminSession();
+
+        document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            const errEl = document.getElementById('error-msg');
+            btn.textContent = 'Verifying...';
+            errEl.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: document.getElementById('email').value,
+                        password: document.getElementById('password').value
+                    })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    window.location.href = '/admin/dashboard.html';
+                } else {
+                    errEl.textContent = data.error;
+                    errEl.style.display = 'block';
+                    btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Enter Dashboard';
+                }
+            } catch (err) {
+                errEl.textContent = 'Server not reachable. Make sure the backend is running.';
+                errEl.style.display = 'block';
+                btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Enter Dashboard';
+            }
+        });
+    </script>
+</body>
+</html>

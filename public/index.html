@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Tips & Tricks | Swapnil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2b9cd9; /* Matches logo light blue */
+            --primary-dark: #1e7eb3;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --bg-light: #ffffff;
+            --bg-offwhite: #f9fafb;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: var(--bg-light);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        /* Real Logo Image */
+        .real-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(43, 156, 217, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px rgba(43, 156, 217, 0.25);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(43, 156, 217, 0.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            align-items: center;
+            padding: 5rem 5%;
+            background-color: var(--bg-offwhite);
+            gap: 4rem;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #111827;
+            letter-spacing: -1px;
+        }
+        
+        .hero-title span {
+            color: var(--primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2.5rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 550px;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Features/Topics Section */
+        .topics {
+            padding: 6rem 5%;
+            text-align: center;
+        }
+
+        .section-tag {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 3.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .topic-card {
+            padding: 2.5rem 2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            text-align: left;
+            transition: box-shadow 0.3s, transform 0.3s;
+            background: white;
+        }
+
+        .topic-card:hover {
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .topic-icon {
+            width: 56px;
+            height: 56px;
+            background-color: rgba(43, 156, 217, 0.1);
+            color: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: #111827;
+        }
+        
+        .topic-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Courses Section */
+        .courses {
+            padding: 6rem 5%;
+            background-color: var(--bg-offwhite);
+        }
+        
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3.5rem;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .course-header {
+            padding: 2.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .course-badge {
+            background-color: #fef3c7;
+            color: #d97706;
+            padding: 0.25rem 1rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .course-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .course-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 1rem;
+        }
+        
+        .course-price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .course-features {
+            padding: 2rem;
+            list-style: none;
+            flex: 1;
+        }
+
+        .course-features li {
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.95rem;
+        }
+
+        .course-features li i {
+            color: #10b981; /* Green checkmark */
+            margin-top: 3px;
+        }
+
+        .course-footer {
+            padding: 0 2rem 2.5rem 2rem;
+        }
+
+        .course-footer .btn {
+            width: 100%;
+            text-align: center;
+            padding: 0.8rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #111827;
+            color: white;
+            padding: 4rem 5%;
+            text-align: center;
+        }
+
+        .footer-socials {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        .footer-socials a {
+            color: #9ca3af;
+            font-size: 1.5rem;
+            transition: color 0.2s;
+        }
+        
+        .footer-socials a:hover {
+            color: white;
+        }
+
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --bg-light: #0f172a;
+            --bg-offwhite: #1e293b;
+            --text-dark: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+        body.dark-mode .topic-card, body.dark-mode .course-card {
+            background-color: #1e293b;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+        body.dark-mode .nav-links a { color: #cbd5e1; }
+        body.dark-mode .nav-links a:hover { color: var(--primary); }
+        
+        /* WhatsApp Widget */
+        .whatsapp-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            transition: transform 0.3s;
+            text-decoration: none;
+        }
+        .whatsapp-widget:hover {
+            transform: scale(1.1);
+            color: white;
+        }
+
+        /* Testimonials */
+        .testimonial-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        body.dark-mode .testimonial-card { background: #1e293b; }
+        .testimonial-stars { color: #fbbf24; margin-bottom: 1rem; }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            margin-right: 1.5rem;
+            transition: color 0.2s;
+        }
+        .theme-toggle:hover { color: var(--primary); }
+
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 4rem;
+                gap: 2rem;
+            }
+            .hero-title { font-size: 2.5rem; }
+            .hero-stats { justify-content: center; }
+            .nav-links { display: none; }
+            .course-card.popular { transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo-container">
+            <img src="assets/logo.png" alt="Computer Tips & Tricks Logo" class="real-logo">
+            Computer Tips & Tricks
+        </a>
+        <div class="nav-links">
+            <a href="#topics">What We Teach</a>
+            <a href="#courses">Job-Ready Courses</a>
+            <a href="#youtube">YouTube</a>
+        </div>
+        <div id="nav-auth" style="display: flex; align-items: center;">
+            <button class="theme-toggle" id="theme-toggle"><i class="fa-solid fa-moon"></i></button>
+            <a href="login.html" class="btn btn-outline" id="login-btn">Student Login</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">The More You Learn,<br><span>The More You Earn.</span></h1>
+            <p class="hero-subtitle">Master MS Word, Excel, Tally Prime, and essential computer skills in Hindi. Get job-ready with practical knowledge and secret office tricks.</p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="#courses" class="btn btn-primary">Start Learning Today</a>
+                <a href="https://www.youtube.com/@computertipstricks007" target="_blank" class="btn btn-outline">
+                    <i class="fa-brands fa-youtube" style="color: #ff0000; margin-right: 5px;"></i> Watch Free Tutorials
+                </a>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-value">1.71K+</span>
+                    <span class="stat-label">YouTube Subs</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">हिंदी</span>
+                    <span class="stat-label">Language</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">100%</span>
+                    <span class="stat-label">Practical</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Student learning on computer">
+        </div>
+    </section>
+
+    <section class="topics" id="topics">
+        <span class="section-tag">Channel Highlights</span>
+        <h2 class="section-title">Master Essential Office Skills</h2>
+        
+        <div class="topic-grid">
+            <div class="topic-card">
+                <div class="topic-icon"><i class="fa-solid fa-file-excel"></i></div>
+                <h3>Excel Mastery & Formulas</h3>
+                <p>Learn advanced formulas like SUMIF, create professional marksheets, and leverage AI like ChatGPT for Excel productivity.</p>
+            </div>
+            
+            <div class="topic-card">
+                <div class="topic-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                <h3>Tally Prime & GST</h3>
+                <p>Step-by-step accounting processes. Master generating GST invoices and managing professional business accounts.</p>
+            </div>
+            
+            <div class="topic-card">
+                <div class="topic-icon"><i class="fa-solid fa-file-word"></i></div>
+                <h3>MS Word & Shortcuts</h3>
+                <p>Discover secret shortcut keys and formatting tricks to type faster and create stunning documents effortlessly.</p>
+            </div>
+            
+            <div class="topic-card">
+                <div class="topic-icon"><i class="fa-solid fa-bolt"></i></div>
+                <h3>Daily Hacks & Tips</h3>
+                <p>Short, bite-sized YouTube shorts and computer hacks that save you hours of work in your daily office tasks.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="courses" id="courses">
+        <div style="text-align: center;">
+            <span class="section-tag">Premium Learning</span>
+            <h2 class="section-title" style="margin-bottom: 1rem;">Job-Ready Certification Courses</h2>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Structured learning paths designed to take you from a beginner to an office professional.</p>
+        </div>
+
+        <div class="course-grid">
+            <!-- Course 1 -->
+            <div class="course-card">
+                <div class="course-header">
+                    <h3 class="course-title">Office Productivity Pro</h3>
+                    <div class="course-price">₹499 <span>/ course</span></div>
+                </div>
+                <ul class="course-features">
+                    <li><i class="fa-solid fa-check"></i> Complete MS Word & Excel</li>
+                    <li><i class="fa-solid fa-check"></i> PowerPoint Presentations</li>
+                    <li><i class="fa-solid fa-check"></i> Secret Keyboard Shortcuts</li>
+                    <li><i class="fa-solid fa-check"></i> Hindi & Marathi Typing Basics</li>
+                    <li><i class="fa-solid fa-check"></i> Course Completion Certificate</li>
+                </ul>
+                <div class="course-footer">
+                    <a href="javascript:void(0)" onclick="buyCourse(1, 'Office Productivity Pro', 499)" class="btn btn-outline">Enroll Now</a>
+                </div>
+            </div>
+
+            <!-- Course 2 (Popular) -->
+            <div class="course-card popular" style="border: 2px solid var(--primary); transform: scale(1.03); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+                <div class="course-header">
+                    <div class="course-badge">MOST POPULAR</div>
+                    <h3 class="course-title">Tally Prime & GST Master</h3>
+                    <div class="course-price">₹1,499 <span>/ course</span></div>
+                </div>
+                <ul class="course-features">
+                    <li><i class="fa-solid fa-check"></i> Complete Tally Prime Setup</li>
+                    <li><i class="fa-solid fa-check"></i> GST Invoice Generation</li>
+                    <li><i class="fa-solid fa-check"></i> Practical Accounting Entries</li>
+                    <li><i class="fa-solid fa-check"></i> Downloadable Practice Files</li>
+                    <li><i class="fa-solid fa-check"></i> Professional Certification</li>
+                </ul>
+                <div class="course-footer">
+                    <a href="javascript:void(0)" onclick="buyCourse(2, 'Tally Prime & GST Master', 1499)" class="btn btn-primary">Enroll Now</a>
+                </div>
+            </div>
+            
+            <!-- Course 3 -->
+            <div class="course-card">
+                <div class="course-header">
+                    <h3 class="course-title">Complete Job-Ready Bundle</h3>
+                    <div class="course-price">₹2,499 <span>/ bundle</span></div>
+                </div>
+                <ul class="course-features">
+                    <li><i class="fa-solid fa-check"></i> All MS Office Modules</li>
+                    <li><i class="fa-solid fa-check"></i> Full Tally Prime & GST Course</li>
+                    <li><i class="fa-solid fa-check"></i> Live Doubt Clearing Sessions</li>
+                    <li><i class="fa-solid fa-check"></i> Resume Building Guide</li>
+                    <li><i class="fa-solid fa-check"></i> Premium Support via WhatsApp</li>
+                </ul>
+                <div class="course-footer">
+                    <a href="javascript:void(0)" onclick="buyCourse(3, 'Complete Job-Ready Bundle', 2499)" class="btn btn-outline">Enroll Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="topics" style="background-color: var(--bg-light);">
+        <span class="section-tag">Student Success</span>
+        <h2 class="section-title">Hear From Our Students</h2>
+        <div class="topic-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                <p style="font-style: italic; margin-bottom: 1.5rem;">"Sir, thanks to your Tally Prime course, I cracked my interview today and got a job as an accountant! The practical GST training was exactly what they asked in the interview."</p>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; justify-content: center; align-items: center; color: white; font-weight: bold;">R</div>
+                    <div>
+                        <h4 style="font-size: 1rem; margin-bottom: 0;">Rahul Sharma</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin:0;">Accountant, Pune</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                <p style="font-style: italic; margin-bottom: 1.5rem;">"The Excel shortcuts and formulas changed how I work. What used to take me 3 hours now takes me 30 minutes. Swapnil sir explains everything so easily in Hindi."</p>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #10b981; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold;">P</div>
+                    <div>
+                        <h4 style="font-size: 1rem; margin-bottom: 0;">Priya Patel</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin:0;">Data Entry Exec, Mumbai</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="topics" id="youtube" style="background-color: var(--bg-offwhite);">
+        <span class="section-tag">Free Tutorials</span>
+        <h2 class="section-title">Learn from our YouTube Channel</h2>
+        <p style="color: var(--text-muted); max-width: 600px; margin: -2rem auto 3rem auto;">Join our 1.71K+ subscribers. Watch our latest tips and tricks directly on YouTube.</p>
+        
+        <div class="topic-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+            <div class="topic-card" style="padding: 0; overflow: hidden; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                <iframe width="100%" height="250" src="https://www.youtube.com/embed/S8d5MTm1RH0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block;"></iframe>
+            </div>
+            <div class="topic-card" style="padding: 0; overflow: hidden; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                <iframe width="100%" height="250" src="https://www.youtube.com/embed/BUmP20xP9Ic" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block;"></iframe>
+            </div>
+            <div class="topic-card" style="padding: 0; overflow: hidden; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                <iframe width="100%" height="250" src="https://www.youtube.com/embed/a1W54SOqPvc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block;"></iframe>
+            </div>
+            <div class="topic-card" style="padding: 0; overflow: hidden; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                <iframe width="100%" height="250" src="https://www.youtube.com/embed/X_SfLX-jIe0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block;"></iframe>
+            </div>
+            <div class="topic-card" style="padding: 0; overflow: hidden; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                <iframe width="100%" height="250" src="https://www.youtube.com/embed/lj_ZlEjSpIc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block;"></iframe>
+            </div>
+            <div class="topic-card" style="padding: 0; overflow: hidden; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                <iframe width="100%" height="250" src="https://www.youtube.com/embed/ewdUiof-q9o" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block;"></iframe>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="https://www.youtube.com/@computertipstricks007" target="_blank" class="btn btn-outline" style="border-color: #ff0000; color: #ff0000;">
+                <i class="fa-brands fa-youtube" style="margin-right: 8px;"></i> View All Videos on YouTube
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo-container" style="justify-content: center; color: white; margin-bottom: 1rem;">
+            <img src="assets/logo.png" alt="Computer Tips & Tricks Logo" class="real-logo" style="border: 2px solid white;">
+            Computer Tips & Tricks
+        </div>
+        <p style="color: #9ca3af; margin-bottom: 2rem;">Empowering your career with practical computer skills in Hindi.</p>
+        
+        <p style="font-size: 0.875rem; color: #6b7280;">© 2024 Swapnil (@computertipstricks007). All rights reserved.</p>
+        
+        <div class="footer-socials">
+            <a href="https://www.youtube.com/@computertipstricks007" target="_blank" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="#" title="Email"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Widget -->
+    <a href="https://wa.me/910000000000?text=Hi%20Swapnil,%20I%20want%20to%20know%20more%20about%20your%20courses!" target="_blank" class="whatsapp-widget">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const icon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if(document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+
+        // Check login state and update navbar accordingly
+        async function checkLoginState() {
+            try {
+                const res = await fetch('/api/me');
+                if (res.ok) {
+                    const user = await res.json();
+                    const navAuth = document.getElementById('nav-auth');
+                    const loginBtn = document.getElementById('login-btn');
+
+                    if (user.role === 'admin') {
+                        // Show admin button
+                        if (!document.getElementById('admin-back-btn')) {
+                            const adminBtn = document.createElement('a');
+                            adminBtn.id = 'admin-back-btn';
+                            adminBtn.href = '/admin';
+                            adminBtn.innerHTML = '<i class="fa-solid fa-shield-halved"></i> Back to Admin';
+                            adminBtn.style.cssText = 'position: fixed; top: 100px; left: 20px; background: #111827; border: 1px solid #374151; color: white; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 9999; display: flex; align-items: center; gap: 8px; transition: transform 0.2s;';
+                            adminBtn.onmouseover = () => adminBtn.style.transform = 'scale(1.05)';
+                            adminBtn.onmouseout = () => adminBtn.style.transform = 'scale(1)';
+                            document.body.appendChild(adminBtn);
+                        }
+                    }
+
+                    if (user.role === 'student') {
+                        // Replace "Student Login" with Dashboard + Logout
+                        if (loginBtn) loginBtn.remove();
+
+                        if (navAuth && !document.getElementById('nav-dash-link')) {
+                            const dashLink = document.createElement('a');
+                            dashLink.id = 'nav-dash-link';
+                            dashLink.href = 'dashboard.html';
+                            dashLink.className = 'btn btn-primary';
+                            dashLink.style.marginRight = '0.75rem';
+                            dashLink.innerHTML = '<i class="fa-solid fa-gauge"></i> My Dashboard';
+
+                            const logoutBtn = document.createElement('a');
+                            logoutBtn.id = 'nav-logout-btn';
+                            logoutBtn.href = '#';
+                            logoutBtn.className = 'btn btn-outline';
+                            logoutBtn.textContent = 'Log Out';
+                            logoutBtn.addEventListener('click', async (e) => {
+                                e.preventDefault();
+                                await fetch('/api/logout', { method: 'POST' });
+                                window.location.reload();
+                            });
+
+                            navAuth.appendChild(dashLink);
+                            navAuth.appendChild(logoutBtn);
+                        }
+                    }
+                }
+            } catch (e) {}
+        }
+        checkLoginState();
+
+        async function buyCourse(courseId, courseName, price) {
+            try {
+                const res = await fetch('/api/me');
+                if (!res.ok) {
+                    alert('Please log in or sign up first to enroll in a course!');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                const user = await res.json();
+                if (user.role === 'admin') {
+                    alert('Admins cannot enroll in courses.');
+                    return;
+                }
+                
+                // Show enrollment modal
+                showEnrollModal(courseId, courseName, price);
+            } catch(e) {
+                alert('Server error. Please try again.');
+            }
+        }
+
+        function showEnrollModal(courseId, courseName, price) {
+            // Remove existing modal if any
+            const existing = document.getElementById('enroll-modal');
+            if (existing) existing.remove();
+
+            const modal = document.createElement('div');
+            modal.id = 'enroll-modal';
+            modal.innerHTML = `
+                <div class="enroll-overlay" onclick="closeEnrollModal()"></div>
+                <div class="enroll-box">
+                    <button class="enroll-close" onclick="closeEnrollModal()">&times;</button>
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <div style="width: 60px; height: 60px; background: rgba(43,156,217,0.1); color: var(--primary); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.75rem; margin: 0 auto 1rem;">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem;">Enroll in Course</h2>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Complete payment details to request enrollment</p>
+                    </div>
+
+                    <div class="enroll-course-summary">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 700; font-size: 1.05rem;">${courseName}</span>
+                            <span style="font-weight: 800; color: var(--primary); font-size: 1.25rem;">₹${price.toLocaleString('en-IN')}</span>
+                        </div>
+                    </div>
+
+                    <form id="enrollForm">
+                        <div class="enroll-field">
+                            <label>Payment Method</label>
+                            <select id="paymentMethod" required>
+                                <option value="">-- Select Payment Method --</option>
+                                <option value="UPI">UPI (Google Pay / PhonePe / Paytm)</option>
+                                <option value="Bank Transfer">Bank Transfer (NEFT/IMPS)</option>
+                                <option value="Cash">Cash (Paid in Person)</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="enroll-field">
+                            <label>Transaction / Reference ID</label>
+                            <input type="text" id="transactionId" placeholder="e.g. UPI Ref: 1234567890" required>
+                            <small style="color: var(--text-muted); font-size: 0.75rem;">Enter your UPI reference number, bank transaction ID, or receipt number</small>
+                        </div>
+
+                        <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #92400e;">
+                            <i class="fa-solid fa-circle-info" style="margin-right: 6px;"></i>
+                            <strong>Note:</strong> After submitting, the admin will verify your payment. You will get access once approved.
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.875rem; font-size: 1rem;" id="enrollSubmitBtn">
+                            <i class="fa-solid fa-paper-plane" style="margin-right: 6px;"></i> Submit Enrollment Request
+                        </button>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            document.getElementById('enrollForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('enrollSubmitBtn');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+                try {
+                    const enrollRes = await fetch('/api/enroll', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            courseId,
+                            courseName,
+                            amount: price,
+                            paymentMethod: document.getElementById('paymentMethod').value,
+                            transactionId: document.getElementById('transactionId').value
+                        })
+                    });
+                    
+                    const data = await enrollRes.json();
+                    if (enrollRes.ok) {
+                        // Show success message inside the modal
+                        document.querySelector('.enroll-box').innerHTML = `
+                            <div style="text-align: center; padding: 2rem 1rem;">
+                                <div style="width: 70px; height: 70px; background: #d1fae5; color: #065f46; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 2rem; margin: 0 auto 1.5rem;">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; color: #065f46;">Request Submitted!</h2>
+                                <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;">
+                                    Your enrollment request for <strong>${courseName}</strong> has been submitted successfully.<br>
+                                    The admin will verify your payment and approve your access shortly.
+                                </p>
+                                <button class="btn btn-primary" onclick="closeEnrollModal()" style="padding: 0.75rem 2rem;">Got it!</button>
+                            </div>
+                        `;
+                    } else {
+                        alert(data.error || 'Enrollment failed.');
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fa-solid fa-paper-plane" style="margin-right: 6px;"></i> Submit Enrollment Request';
+                    }
+                } catch(err) {
+                    alert('Server error. Please try again.');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-paper-plane" style="margin-right: 6px;"></i> Submit Enrollment Request';
+                }
+            });
+        }
+
+        function closeEnrollModal() {
+            const modal = document.getElementById('enroll-modal');
+            if (modal) modal.remove();
+        }
+    </script>
+
+    <style>
+        #enroll-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; display: flex; justify-content: center; align-items: center; }
+        .enroll-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+        .enroll-box { position: relative; background: white; border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 480px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalSlideIn 0.3s ease; max-height: 90vh; overflow-y: auto; }
+        @keyframes modalSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .enroll-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.75rem; cursor: pointer; color: #9ca3af; line-height: 1; transition: color 0.2s; }
+        .enroll-close:hover { color: #1f2937; }
+        .enroll-course-summary { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
+        .enroll-field { margin-bottom: 1.25rem; }
+        .enroll-field label { display: block; font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; color: #374151; }
+        .enroll-field select, .enroll-field input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.95rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; font-family: 'Inter', sans-serif; }
+        .enroll-field select:focus, .enroll-field input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(43,156,217,0.15); }
+        body.dark-mode .enroll-box { background: #1e293b; }
+        body.dark-mode .enroll-course-summary { background: #0f172a; border-color: #334155; }
+        body.dark-mode .enroll-field select, body.dark-mode .enroll-field input { background: #0f172a; border-color: #334155; color: #f8fafc; }
+    </style>
+</body>
+</html>

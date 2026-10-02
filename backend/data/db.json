@@ -1,0 +1,67 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Swapnil (Admin)",
+      "email": "admin@computertips.com",
+      "password": "$2a$10$Qr5NfUhYP2SxhSGYkuAS7.Xdl5u9ou/8HGuvIYa2Bx.ddrQ0OiQ/i",
+      "role": "admin",
+      "createdAt": "2026-10-01T17:54:01.954Z"
+    },
+    {
+      "id": 2,
+      "name": "om",
+      "email": "om@gmail.com",
+      "phone": "999999999",
+      "password": "$2a$10$DaFvWS8Y9GqFz4Iwwsfyk.BbsYfqJ/sk8s8QC6PVBCswr/jKDERTu",
+      "role": "student",
+      "createdAt": "2026-10-01T17:58:54.599Z"
+    },
+    {
+      "id": 3,
+      "name": "OM",
+      "email": "omp@gmail.com",
+      "phone": "1234567890",
+      "password": "$2a$10$CpahcgzwUbQYM/xYgZJIKO45kS.2Gl83vJa7LE3XIqSBUi2G2pvPa",
+      "role": "student",
+      "createdAt": "2026-10-01T18:40:04.802Z"
+    },
+    {
+      "id": 4,
+      "name": "moksha",
+      "email": "moksha@gmail.com",
+      "phone": "",
+      "password": "$2a$10$qjzU6lwNGvoSaKcxyOfv0OIOmlgRKDX028ukG6nlshtGmLw4qg5LO",
+      "role": "student",
+      "createdAt": "2026-10-02T03:55:49.115Z"
+    }
+  ],
+  "enrollments": [
+    {
+      "id": 1,
+      "userId": 4,
+      "userName": "moksha",
+      "courseId": 2,
+      "courseName": "Tally Prime & GST Master",
+      "amount": 1499,
+      "status": "APPROVED",
+      "createdAt": "2026-10-02T04:02:44.183Z"
+    },
+    {
+      "id": 2,
+      "userId": 4,
+      "userName": "moksha",
+      "userEmail": "moksha@gmail.com",
+      "userPhone": "",
+      "courseId": 3,
+      "courseName": "Complete Job-Ready Bundle",
+      "amount": 2499,
+      "paymentMethod": "UPI",
+      "transactionId": "123456789",
+      "status": "APPROVED",
+      "createdAt": "2026-10-02T04:34:33.520Z",
+      "approvedAt": "2026-10-02T04:35:00.703Z"
+    }
+  ],
+  "contacts": []
+}

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Computer Tips & Tricks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #2b9cd9; --sidebar-bg: #111827; --main-bg: #f3f4f6; --card-bg: #ffffff; --text-dark: #1f2937; --text-muted: #6b7280; --border: #e5e7eb; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { display: flex; min-height: 100vh; background: var(--main-bg); color: var(--text-dark); }
+        
+        /* Sidebar */
+        .sidebar { width: 260px; background: var(--sidebar-bg); color: white; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; }
+        .sidebar-header { padding: 1.5rem; font-weight: 800; font-size: 1.1rem; border-bottom: 1px solid #374151; display: flex; align-items: center; gap: 10px; }
+        .real-logo { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+        .sidebar-nav { padding: 1rem 0; flex: 1; }
+        .sidebar-nav a { display: flex; align-items: center; gap: 12px; padding: 0.875rem 1.5rem; color: #9ca3af; text-decoration: none; font-weight: 500; transition: 0.2s; border-left: 3px solid transparent; }
+        .sidebar-nav a:hover, .sidebar-nav a.active { color: white; background: rgba(255,255,255,0.05); border-left-color: var(--primary); }
+        .sidebar-nav a i { width: 20px; text-align: center; }
+        .sidebar-footer { padding: 1.5rem; border-top: 1px solid #374151; }
+        .sidebar-footer button { width: 100%; padding: 0.6rem; background: transparent; border: 1px solid #374151; color: #9ca3af; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .sidebar-footer button:hover { border-color: #ef4444; color: #ef4444; }
+        .nav-badge { background: #ef4444; color: white; font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 999px; margin-left: auto; }
+
+        /* Main Content */
+        .main { margin-left: 260px; flex: 1; padding: 2rem; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .page-header h1 { font-size: 1.75rem; font-weight: 800; }
+
+        /* Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+        .stat-card { background: var(--card-bg); padding: 1.75rem; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 1.25rem; }
+        .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; }
+        .stat-icon.blue { background: rgba(43, 156, 217, 0.1); color: var(--primary); }
+        .stat-icon.green { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .stat-icon.purple { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+        .stat-icon.orange { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .stat-value { font-size: 2rem; font-weight: 800; margin-top: 0.25rem; }
+
+        /* Table */
+        .table-card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 2rem; }
+        .table-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .table-header h2 { font-size: 1.1rem; font-weight: 700; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem 1.5rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: #f9fafb; color: var(--text-muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        td { font-size: 0.95rem; }
+        .badge { padding: 0.2rem 0.75rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.03em; }
+        .badge-green { background: #d1fae5; color: #065f46; }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-orange { background: #fef3c7; color: #92400e; }
+        .badge-red { background: #fef2f2; color: #dc2626; }
+        .delete-btn { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1rem; padding: 0.5rem; border-radius: 6px; transition: 0.2s; }
+        .delete-btn:hover { background: #fef2f2; }
+        .action-btn { padding: 0.35rem 0.75rem; border: none; border-radius: 6px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
+        .approve-btn { background: #d1fae5; color: #065f46; }
+        .approve-btn:hover { background: #a7f3d0; }
+        .reject-btn { background: #fef2f2; color: #dc2626; }
+        .reject-btn:hover { background: #fecaca; }
+        .empty-state { padding: 3rem; text-align: center; color: var(--text-muted); }
+        .empty-state i { font-size: 3rem; margin-bottom: 1rem; display: block; color: #d1d5db; }
+        
+        /* Loading */
+        .loading { text-align: center; padding: 3rem; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="assets/logo.png" class="real-logo"> Admin Panel
+        </div>
+        <div class="sidebar-nav">
+            <a href="#" class="active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="#" id="nav-students"><i class="fa-solid fa-users"></i> All Students</a>
+            <a href="#" id="nav-enrollments"><i class="fa-solid fa-clock-rotate-left"></i> Enrollment Requests <span class="nav-badge" id="pending-badge" style="display:none;">0</span></a>
+            <a href="/" style="margin-top: auto;"><i class="fa-solid fa-globe"></i> View Public Site</a>
+        </div>
+        <div class="sidebar-footer">
+            <button onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <div class="page-header">
+            <h1>Dashboard Overview</h1>
+            <span style="color: var(--text-muted); font-size: 0.9rem;" id="date-display"></span>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
+                <div>
+                    <div class="stat-label">Total Students</div>
+                    <div class="stat-value" id="stat-students">-</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                <div>
+                    <div class="stat-label">Total Revenue</div>
+                    <div class="stat-value" id="stat-revenue">-</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div>
+                    <div class="stat-label">Approved Enrollments</div>
+                    <div class="stat-value" id="stat-enrollments">-</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange"><i class="fa-solid fa-hourglass-half"></i></div>
+                <div>
+                    <div class="stat-label">Pending Requests</div>
+                    <div class="stat-value" id="stat-pending">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Enrollment Requests -->
+        <div class="table-card" id="pending-section">
+            <div class="table-header">
+                <h2><i class="fa-solid fa-hourglass-half" style="margin-right: 8px; color: #f59e0b;"></i>Pending Enrollment Requests</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);" id="pending-count"></span>
+            </div>
+            <div id="pending-table-body">
+                <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading data...</div>
+            </div>
+        </div>
+
+        <!-- Students Table -->
+        <div class="table-card">
+            <div class="table-header">
+                <h2><i class="fa-solid fa-users" style="margin-right: 8px; color: var(--primary);"></i>Registered Students</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);" id="student-count"></span>
+            </div>
+            <div id="students-table-body">
+                <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading data...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show current date
+        document.getElementById('date-display').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                const res = await fetch('/api/admin/stats');
+                if (res.status === 403) {
+                    window.location.href = '/admin/';
+                    return;
+                }
+                const data = await res.json();
+                
+                document.getElementById('stat-students').textContent = data.totalStudents;
+                document.getElementById('stat-revenue').textContent = '₹' + data.totalRevenue.toLocaleString('en-IN');
+                document.getElementById('stat-enrollments').textContent = data.totalEnrollments;
+                document.getElementById('stat-pending').textContent = data.pendingEnrollments.length;
+                document.getElementById('student-count').textContent = data.recentStudents.length + ' students';
+
+                // Update pending badge in sidebar
+                const badge = document.getElementById('pending-badge');
+                if (data.pendingEnrollments.length > 0) {
+                    badge.textContent = data.pendingEnrollments.length;
+                    badge.style.display = 'inline';
+                } else {
+                    badge.style.display = 'none';
+                }
+
+                renderPendingEnrollments(data.pendingEnrollments);
+                renderStudents(data.recentStudents);
+            } catch (err) {
+                document.getElementById('students-table-body').innerHTML = '<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i>Could not connect to server.</div>';
+                document.getElementById('pending-table-body').innerHTML = '<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i>Could not connect to server.</div>';
+            }
+        }
+
+        function renderPendingEnrollments(enrollments) {
+            const container = document.getElementById('pending-table-body');
+            const countEl = document.getElementById('pending-count');
+            countEl.textContent = enrollments.length + ' pending';
+
+            if (enrollments.length === 0) {
+                container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-circle-check" style="color: #10b981;"></i>No pending requests.<br>All enrollment requests have been processed!</div>';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>Student</th><th>Course</th><th>Amount</th><th>Payment</th><th>Transaction ID</th><th>Date</th><th>Actions</th></tr></thead><tbody>';
+            enrollments.forEach(e => {
+                const date = new Date(e.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+                html += `<tr id="enroll-row-${e.id}">
+                    <td>
+                        <div style="font-weight: 600;">${e.userName}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">${e.userEmail || ''}</div>
+                    </td>
+                    <td style="font-weight: 600;">${e.courseName}</td>
+                    <td><span style="font-weight: 700; color: #10b981;">₹${(e.amount || 0).toLocaleString('en-IN')}</span></td>
+                    <td><span class="badge badge-blue">${e.paymentMethod || 'N/A'}</span></td>
+                    <td style="font-size: 0.85rem; font-weight: 500;">${e.transactionId || '<span style="color:#d1d5db;">—</span>'}</td>
+                    <td style="color: var(--text-muted); font-size: 0.85rem;">${date}</td>
+                    <td>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="action-btn approve-btn" onclick="approveEnrollment(${e.id})"><i class="fa-solid fa-check"></i> Approve</button>
+                            <button class="action-btn reject-btn" onclick="rejectEnrollment(${e.id})"><i class="fa-solid fa-xmark"></i> Reject</button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function renderStudents(students) {
+            const container = document.getElementById('students-table-body');
+            if (students.length === 0) {
+                container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-user-plus"></i>No students registered yet.<br>Share your website link to get started!</div>';
+                return;
+            }
+            
+            let html = '<table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th><th>Action</th></tr></thead><tbody>';
+            students.forEach(s => {
+                const date = new Date(s.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+                html += `<tr id="row-${s.id}">
+                    <td style="font-weight: 600;">${s.name}</td>
+                    <td>${s.email}</td>
+                    <td>${s.phone || '<span style="color:#d1d5db;">—</span>'}</td>
+                    <td style="color: var(--text-muted);">${date}</td>
+                    <td><button class="delete-btn" onclick="deleteStudent(${s.id})" title="Remove student"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        async function approveEnrollment(id) {
+            if (!confirm('Approve this enrollment? The student will get access to the course.')) return;
+            try {
+                const res = await fetch('/api/admin/enrollments/' + id + '/approve', { method: 'PUT' });
+                if (res.ok) {
+                    loadDashboard();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to approve.');
+                }
+            } catch (err) {
+                alert('Server error.');
+            }
+        }
+
+        async function rejectEnrollment(id) {
+            if (!confirm('Reject this enrollment request? The student will not get access.')) return;
+            try {
+                const res = await fetch('/api/admin/enrollments/' + id + '/reject', { method: 'PUT' });
+                if (res.ok) {
+                    loadDashboard();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to reject.');
+                }
+            } catch (err) {
+                alert('Server error.');
+            }
+        }
+
+        async function deleteStudent(id) {
+            if (!confirm('Are you sure you want to remove this student?')) return;
+            try {
+                await fetch('/api/admin/students/' + id, { method: 'DELETE' });
+                document.getElementById('row-' + id).remove();
+                loadDashboard();
+            } catch (err) {
+                alert('Failed to delete student.');
+            }
+        }
+
+        async function logout() {
+            await fetch('/api/admin/logout', { method: 'POST' });
+            window.location.href = '/admin/';
+        }
+
+        loadDashboard();
+    </script>
+</body>
+</html>
