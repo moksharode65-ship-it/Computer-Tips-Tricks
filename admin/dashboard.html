@@ -245,6 +245,7 @@
             try {
                 const res = await fetch('/api/admin/enrollments/' + id + '/approve', { method: 'PUT' });
                 if (res.ok) {
+                    alert('✅ Enrollment approved successfully!');
                     loadDashboard();
                 } else {
                     const data = await res.json();
@@ -260,6 +261,7 @@
             try {
                 const res = await fetch('/api/admin/enrollments/' + id + '/reject', { method: 'PUT' });
                 if (res.ok) {
+                    alert('Enrollment rejected.');
                     loadDashboard();
                 } else {
                     const data = await res.json();
