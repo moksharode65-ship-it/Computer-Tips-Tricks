@@ -208,8 +208,8 @@
                     <td style="color: var(--text-muted); font-size: 0.85rem;">${date}</td>
                     <td>
                         <div style="display: flex; gap: 0.5rem;">
-                            <button class="action-btn approve-btn" onclick="approveEnrollment(${e.id})"><i class="fa-solid fa-check"></i> Approve</button>
-                            <button class="action-btn reject-btn" onclick="rejectEnrollment(${e.id})"><i class="fa-solid fa-xmark"></i> Reject</button>
+                            <button class="action-btn approve-btn" onclick="approveEnrollment('${e.id}')"><i class="fa-solid fa-check"></i> Approve</button>
+                            <button class="action-btn reject-btn" onclick="rejectEnrollment('${e.id}')"><i class="fa-solid fa-xmark"></i> Reject</button>
                         </div>
                     </td>
                 </tr>`;
@@ -233,7 +233,7 @@
                     <td>${s.email}</td>
                     <td>${s.phone || '<span style="color:#d1d5db;">—</span>'}</td>
                     <td style="color: var(--text-muted);">${date}</td>
-                    <td><button class="delete-btn" onclick="deleteStudent(${s.id})" title="Remove student"><i class="fa-solid fa-trash"></i></button></td>
+                    <td><button class="delete-btn" onclick="deleteStudent('${s.id}')" title="Remove student"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>`;
             });
             html += '</tbody></table>';

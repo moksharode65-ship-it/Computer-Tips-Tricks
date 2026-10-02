@@ -269,14 +269,16 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
 app.put('/api/admin/enrollments/:id/approve', requireAdmin, async (req, res) => {
     try {
         const { enrollments } = await getCollections();
-        const result = await enrollments.findOneAndUpdate(
-            { _id: new ObjectId(req.params.id) },
-            { $set: { status: 'APPROVED', approvedAt: new Date().toISOString() } },
-            { returnDocument: 'after' }
+        let query;
+        try { query = { _id: new ObjectId(req.params.id) }; } catch (e) { query = { id: req.params.id }; }
+        const result = await enrollments.updateOne(
+            query,
+            { $set: { status: 'APPROVED', approvedAt: new Date().toISOString() } }
         );
-        if (!result) return res.status(404).json({ error: 'Enrollment not found.' });
-        res.json({ success: true, enrollment: { ...result, id: result._id.toString() } });
+        if (result.matchedCount === 0) return res.status(404).json({ error: 'Enrollment not found.' });
+        res.json({ success: true });
     } catch (err) {
+        console.error('Approve error:', err);
         res.status(500).json({ error: 'Server error.' });
     }
 });
@@ -285,14 +287,16 @@ app.put('/api/admin/enrollments/:id/approve', requireAdmin, async (req, res) => 
 app.put('/api/admin/enrollments/:id/reject', requireAdmin, async (req, res) => {
     try {
         const { enrollments } = await getCollections();
-        const result = await enrollments.findOneAndUpdate(
-            { _id: new ObjectId(req.params.id) },
-            { $set: { status: 'REJECTED', rejectedAt: new Date().toISOString() } },
-            { returnDocument: 'after' }
+        let query;
+        try { query = { _id: new ObjectId(req.params.id) }; } catch (e) { query = { id: req.params.id }; }
+        const result = await enrollments.updateOne(
+            query,
+            { $set: { status: 'REJECTED', rejectedAt: new Date().toISOString() } }
         );
-        if (!result) return res.status(404).json({ error: 'Enrollment not found.' });
-        res.json({ success: true, enrollment: { ...result, id: result._id.toString() } });
+        if (result.matchedCount === 0) return res.status(404).json({ error: 'Enrollment not found.' });
+        res.json({ success: true });
     } catch (err) {
+        console.error('Reject error:', err);
         res.status(500).json({ error: 'Server error.' });
     }
 });
