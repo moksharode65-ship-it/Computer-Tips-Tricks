@@ -765,56 +765,107 @@
             }
         }
 
+        function copyUpiId() {
+            const upiId = '9876543210@paytm';
+            navigator.clipboard.writeText(upiId).then(() => {
+                const btn = document.getElementById('copyUpiBtn');
+                if (btn) {
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                    setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy'; }, 2000);
+                }
+            });
+        }
+
         function showEnrollModal(courseId, courseName, price) {
             // Remove existing modal if any
             const existing = document.getElementById('enroll-modal');
             if (existing) existing.remove();
 
+            const qrData = encodeURIComponent(`upi://pay?pa=9876543210@paytm&pn=Swapnil%20Computer%20Tips&am=${price}&cu=INR`);
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${qrData}`;
+
             const modal = document.createElement('div');
             modal.id = 'enroll-modal';
             modal.innerHTML = `
                 <div class="enroll-overlay" onclick="closeEnrollModal()"></div>
-                <div class="enroll-box">
+                <div class="enroll-box" style="max-width: 520px;">
                     <button class="enroll-close" onclick="closeEnrollModal()">&times;</button>
-                    <div style="text-align: center; margin-bottom: 1.5rem;">
-                        <div style="width: 60px; height: 60px; background: rgba(43,156,217,0.1); color: var(--primary); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.75rem; margin: 0 auto 1rem;">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                        </div>
-                        <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem;">Enroll in Course</h2>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">Complete payment details to request enrollment</p>
+                    <div style="text-align: center; margin-bottom: 1.25rem;">
+                        <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.25rem;">Complete Course Payment</h2>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">Scan QR code or use Bank Transfer to make payment</p>
                     </div>
 
-                    <div class="enroll-course-summary">
+                    <div class="enroll-course-summary" style="margin-bottom: 1.25rem;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-weight: 700; font-size: 1.05rem;">${courseName}</span>
+                            <span style="font-weight: 700; font-size: 1rem;">${courseName}</span>
                             <span style="font-weight: 800; color: var(--primary); font-size: 1.25rem;">₹${price.toLocaleString('en-IN')}</span>
                         </div>
                     </div>
 
+                    <!-- Payment Details Tabs -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem; text-align: center;" id="payment-box">
+                        <div style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">
+                            <i class="fa-solid fa-qrcode" style="color: var(--primary);"></i> Scan & Pay via any UPI App
+                        </div>
+
+                        <!-- QR Code -->
+                        <div style="background: white; border: 1px solid #cbd5e1; display: inline-block; padding: 8px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 1rem;">
+                            <img src="${qrUrl}" alt="UPI QR Code" style="width: 160px; height: 160px; display: block; border-radius: 6px;">
+                        </div>
+
+                        <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 1rem; color: #64748b; font-size: 1.1rem;">
+                            <i class="fa-brands fa-google-pay" title="Google Pay"></i>
+                            <i class="fa-solid fa-mobile-screen-button" title="PhonePe / Paytm"></i>
+                            <span style="font-weight: 800; font-size: 0.8rem; background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">UPI</span>
+                        </div>
+
+                        <!-- UPI ID Box -->
+                        <div style="background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 0.6rem 1rem; display: flex; justify-content: space-between; align-items: center; max-width: 320px; margin: 0 auto 0.75rem;">
+                            <div style="text-align: left;">
+                                <div style="font-size: 0.7rem; color: #64748b; font-weight: 600;">UPI ID / GPay No.</div>
+                                <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a;">9876543210@paytm</div>
+                            </div>
+                            <button id="copyUpiBtn" onclick="copyUpiId()" style="background: var(--primary); color: white; border: none; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </div>
+
+                        <!-- Bank Details Accordion / Note -->
+                        <details style="text-align: left; background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.5rem 0.75rem; font-size: 0.8rem;">
+                            <summary style="font-weight: 600; cursor: pointer; color: var(--primary);">
+                                <i class="fa-solid fa-building-columns"></i> View Direct Bank Transfer Details
+                            </summary>
+                            <div style="margin-top: 0.5rem; border-top: 1px solid #f1f5f9; padding-top: 0.5rem; color: #334155; line-height: 1.5;">
+                                <div><strong>Bank:</strong> State Bank of India (SBI)</div>
+                                <div><strong>Account Name:</strong> Swapnil Computer Tips</div>
+                                <div><strong>Account No:</strong> 389201928471</div>
+                                <div><strong>IFSC Code:</strong> SBIN0001234</div>
+                            </div>
+                        </details>
+                    </div>
+
                     <form id="enrollForm">
                         <div class="enroll-field">
-                            <label>Payment Method</label>
+                            <label>Payment Method Used</label>
                             <select id="paymentMethod" required>
-                                <option value="">-- Select Payment Method --</option>
                                 <option value="UPI">UPI (Google Pay / PhonePe / Paytm)</option>
-                                <option value="Bank Transfer">Bank Transfer (NEFT/IMPS)</option>
+                                <option value="Bank Transfer">Bank Transfer (NEFT / IMPS)</option>
                                 <option value="Cash">Cash (Paid in Person)</option>
-                                <option value="Other">Other</option>
                             </select>
                         </div>
                         <div class="enroll-field">
-                            <label>Transaction / Reference ID</label>
-                            <input type="text" id="transactionId" placeholder="e.g. UPI Ref: 1234567890" required>
-                            <small style="color: var(--text-muted); font-size: 0.75rem;">Enter your UPI reference number, bank transaction ID, or receipt number</small>
+                            <label>UPI Ref ID / Transaction Number</label>
+                            <input type="text" id="transactionId" placeholder="e.g. 123456789012" required>
+                            <small style="color: var(--text-muted); font-size: 0.75rem;">Enter the 12-digit UPI Ref ID or Bank Transaction Number from your payment app</small>
                         </div>
 
-                        <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #065f46;">
+                        <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 0.6rem 0.85rem; margin-bottom: 1.25rem; font-size: 0.8rem; color: #065f46;">
                             <i class="fa-solid fa-circle-check" style="margin-right: 6px;"></i>
-                            <strong>Instant Access:</strong> You will get instant access to your course upon submitting.
+                            <strong>Instant Access:</strong> Your course access will unlock immediately upon submission!
                         </div>
 
-                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.875rem; font-size: 1rem;" id="enrollSubmitBtn">
-                            <i class="fa-solid fa-graduation-cap" style="margin-right: 6px;"></i> Complete Enrollment & Access Course
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-size: 0.95rem;" id="enrollSubmitBtn">
+                            <i class="fa-solid fa-graduation-cap" style="margin-right: 6px;"></i> Submit Payment & Access Course
                         </button>
                     </form>
                 </div>
