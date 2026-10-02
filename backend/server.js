@@ -153,40 +153,67 @@ app.get('/api/me', async (req, res) => {
     }
 });
 
+// Server-side Course Price Registry
+const COURSE_PRICES = {
+    '1': 499,
+    '2': 1499,
+    '3': 2499,
+    'office-pro': 499,
+    'tally-prime': 1499,
+    'job-bundle': 2499
+};
+
 // Student Enrollment Request
 app.post('/api/enroll', async (req, res) => {
     if (!req.session.userId) return res.status(401).json({ error: 'Not logged in.' });
-    const { courseId, courseName, amount, paymentMethod, transactionId } = req.body;
+    const { courseId, courseName, paymentMethod, transactionId } = req.body;
+    
+    // 1. Validate Transaction / UTR ID format
+    const cleanTxnId = (transactionId || '').trim();
+    if (!cleanTxnId || cleanTxnId.length < 8) {
+        return res.status(400).json({ error: 'Please enter a valid 12-digit UPI Reference Number or Bank Transaction ID.' });
+    }
+
     try {
         const { users, enrollments } = await getCollections();
         const user = await users.findOne({ _id: new ObjectId(req.session.userId) });
 
+        // 2. Prevent Duplicate UTR Reuse
+        const duplicateTxn = await enrollments.findOne({ transactionId: cleanTxnId });
+        if (duplicateTxn) {
+            return res.status(400).json({ error: 'This Transaction ID / UTR has already been submitted. Please check your UPI app statement.' });
+        }
+
+        // 3. Check if already enrolled in this course
         const existing = await enrollments.findOne({
             userId: req.session.userId,
-            courseId,
+            courseId: String(courseId),
             status: 'APPROVED'
         });
         if (existing) {
             return res.status(400).json({ error: 'You are already enrolled in this course.' });
         }
 
+        // 4. Lock exact amount server-side based on course registry
+        const exactPrice = COURSE_PRICES[String(courseId)] || req.body.amount || 1499;
+
         const enrollment = {
             userId: req.session.userId,
             userName: user.name,
             userEmail: user.email,
             userPhone: user.phone || '',
-            courseId,
-            courseName,
-            amount,
-            paymentMethod: paymentMethod || 'Not specified',
-            transactionId: transactionId || '',
+            courseId: String(courseId),
+            courseName: courseName || 'Computer Course',
+            amount: exactPrice,
+            paymentMethod: paymentMethod || 'UPI',
+            transactionId: cleanTxnId,
             status: 'APPROVED',
             approvedAt: new Date().toISOString(),
             createdAt: new Date().toISOString()
         };
 
         const result = await enrollments.insertOne(enrollment);
-        res.json({ success: true, message: '🎉 Enrollment successful! You now have instant access to your course.', enrollment: { ...enrollment, id: result.insertedId.toString() } });
+        res.json({ success: true, message: '🎉 Enrollment successful! Your course access has been unlocked.', enrollment: { ...enrollment, id: result.insertedId.toString() } });
     } catch (err) {
         console.error('Enroll error:', err);
         res.status(500).json({ error: 'Server error. Please try again.' });
