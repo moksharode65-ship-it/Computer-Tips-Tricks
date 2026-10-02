@@ -35,7 +35,12 @@ async function connectDB() {
             createdAt: new Date().toISOString()
         });
         console.log('✅ Default admin created: admin@computertips.com / admin123');
-    }
+    // Ensure legacy pending enrollments are auto-approved
+    const enrollments = db.collection('enrollments');
+    await enrollments.updateMany(
+        { status: 'PENDING' },
+        { $set: { status: 'APPROVED', approvedAt: new Date().toISOString() } }
+    );
 
     return db;
 }
@@ -157,12 +162,9 @@ app.post('/api/enroll', async (req, res) => {
         const existing = await enrollments.findOne({
             userId: req.session.userId,
             courseId,
-            status: { $in: ['APPROVED', 'PENDING'] }
+            status: 'APPROVED'
         });
         if (existing) {
-            if (existing.status === 'PENDING') {
-                return res.status(400).json({ error: 'Your enrollment request is already pending admin approval.' });
-            }
             return res.status(400).json({ error: 'You are already enrolled in this course.' });
         }
 
@@ -176,12 +178,13 @@ app.post('/api/enroll', async (req, res) => {
             amount,
             paymentMethod: paymentMethod || 'Not specified',
             transactionId: transactionId || '',
-            status: 'PENDING',
+            status: 'APPROVED',
+            approvedAt: new Date().toISOString(),
             createdAt: new Date().toISOString()
         };
 
         const result = await enrollments.insertOne(enrollment);
-        res.json({ success: true, message: 'Enrollment request submitted! The admin will verify your payment and approve your access.', enrollment: { ...enrollment, id: result.insertedId.toString() } });
+        res.json({ success: true, message: '🎉 Enrollment successful! You now have instant access to your course.', enrollment: { ...enrollment, id: result.insertedId.toString() } });
     } catch (err) {
         console.error('Enroll error:', err);
         res.status(500).json({ error: 'Server error. Please try again.' });

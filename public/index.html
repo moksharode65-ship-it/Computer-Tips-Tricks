@@ -808,13 +808,13 @@
                             <small style="color: var(--text-muted); font-size: 0.75rem;">Enter your UPI reference number, bank transaction ID, or receipt number</small>
                         </div>
 
-                        <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #92400e;">
-                            <i class="fa-solid fa-circle-info" style="margin-right: 6px;"></i>
-                            <strong>Note:</strong> After submitting, the admin will verify your payment. You will get access once approved.
+                        <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #065f46;">
+                            <i class="fa-solid fa-circle-check" style="margin-right: 6px;"></i>
+                            <strong>Instant Access:</strong> You will get instant access to your course upon submitting.
                         </div>
 
                         <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.875rem; font-size: 1rem;" id="enrollSubmitBtn">
-                            <i class="fa-solid fa-paper-plane" style="margin-right: 6px;"></i> Submit Enrollment Request
+                            <i class="fa-solid fa-graduation-cap" style="margin-right: 6px;"></i> Complete Enrollment & Access Course
                         </button>
                     </form>
                 </div>
@@ -846,14 +846,14 @@
                         document.querySelector('.enroll-box').innerHTML = `
                             <div style="text-align: center; padding: 2rem 1rem;">
                                 <div style="width: 70px; height: 70px; background: #d1fae5; color: #065f46; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 2rem; margin: 0 auto 1.5rem;">
-                                    <i class="fa-solid fa-check"></i>
+                                    <i class="fa-solid fa-circle-check"></i>
                                 </div>
-                                <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; color: #065f46;">Request Submitted!</h2>
+                                <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; color: #065f46;">Enrollment Successful! 🎉</h2>
                                 <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;">
-                                    Your enrollment request for <strong>${courseName}</strong> has been submitted successfully.<br>
-                                    The admin will verify your payment and approve your access shortly.
+                                    You have successfully enrolled in <strong>${courseName}</strong>.<br>
+                                    Your access has been granted instantly!
                                 </p>
-                                <button class="btn btn-primary" onclick="closeEnrollModal()" style="padding: 0.75rem 2rem;">Got it!</button>
+                                <a class="btn btn-primary" href="/dashboard.html" style="padding: 0.75rem 2rem; text-decoration: none; display: inline-block;">Go to My Dashboard</a>
                             </div>
                         `;
                     } else {
